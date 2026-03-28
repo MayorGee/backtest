@@ -7,7 +7,7 @@ import {
     type ReactNode,
 } from 'react';
 import { MOCK_EQUITY_DATA, MOCK_EXECUTION_LOG, MOCK_METRICS } from '../data/dashboardMock';
-import type { StrategyId } from '../types/backtest';
+import type { DatasetConfig, StrategyId } from '../types/backtest';
 import {
     backtestReducer,
     initialBacktestState,
@@ -21,6 +21,7 @@ interface BacktestContextValue {
     dispatch: React.Dispatch<BacktestAction>;
     setStrategyId: (id: StrategyId) => void;
     setParam: (key: keyof BacktestParams, value: number) => void;
+    setDataset: (partial: Partial<DatasetConfig>) => void;
     runBacktest: () => Promise<void>;
 }
 
@@ -35,6 +36,10 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
 
     const setParam = useCallback((key: keyof BacktestParams, value: number) => {
         dispatch({ type: 'SET_PARAM', key, value });
+    }, []);
+
+    const setDataset = useCallback((partial: Partial<DatasetConfig>) => {
+        dispatch({ type: 'SET_DATASET', partial });
     }, []);
 
     const runBacktest = useCallback(async () => {
@@ -54,9 +59,10 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
             dispatch,
             setStrategyId,
             setParam,
+            setDataset,
             runBacktest,
         }),
-        [state, setStrategyId, setParam, runBacktest],
+        [state, setStrategyId, setParam, setDataset, runBacktest],
     );
 
     return <BacktestContext.Provider value={value}>{children}</BacktestContext.Provider>;

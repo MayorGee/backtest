@@ -1,4 +1,10 @@
-import type { DisplayMetric, EquityChartPoint, ExecutionLogRow, StrategyId } from '../types/backtest';
+import type {
+    DatasetConfig,
+    DisplayMetric,
+    EquityChartPoint,
+    ExecutionLogRow,
+    StrategyId,
+} from '../types/backtest';
 
 export interface BacktestParams {
     fastPeriod: number;
@@ -11,6 +17,7 @@ export interface BacktestParams {
 export interface BacktestState {
     strategyId: StrategyId;
     params: BacktestParams;
+    dataset: DatasetConfig;
     runStatus: 'idle' | 'running' | 'done';
     /** Populated after a successful run (mock or API). */
     displayMetrics: DisplayMetric[] | null;
@@ -21,6 +28,7 @@ export interface BacktestState {
 export type BacktestAction =
     | { type: 'SET_STRATEGY'; strategyId: StrategyId }
     | { type: 'SET_PARAM'; key: keyof BacktestParams; value: number }
+    | { type: 'SET_DATASET'; partial: Partial<DatasetConfig> }
     | { type: 'RUN_START' }
     | {
           type: 'RUN_SUCCESS';
@@ -38,9 +46,20 @@ export const defaultBacktestParams: BacktestParams = {
     rsiOversold: 30,
 };
 
+export const initialDataset: DatasetConfig = {
+    symbol: 'BTC/USDT',
+    startDate: '01/01/2023',
+    endDate: '12/31/2023',
+    interval: '1h',
+    exchange: 'Binance',
+    dataSource: 'exchange',
+    csvFileLabel: null,
+};
+
 export const initialBacktestState: BacktestState = {
     strategyId: 'sma_crossover',
     params: { ...defaultBacktestParams },
+    dataset: { ...initialDataset },
     runStatus: 'idle',
     displayMetrics: null,
     equitySeries: null,
@@ -55,6 +74,11 @@ export function backtestReducer(state: BacktestState, action: BacktestAction): B
             return {
                 ...state,
                 params: { ...state.params, [action.key]: action.value },
+            };
+        case 'SET_DATASET':
+            return {
+                ...state,
+                dataset: { ...state.dataset, ...action.partial },
             };
         case 'RUN_START':
             return { ...state, runStatus: 'running' };

@@ -100,6 +100,16 @@
     pointer-events: none;
 }
 
+.metaGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+
+    @include respond-to('small') {
+        grid-template-columns: 1fr;
+    }
+}
+
 .dateGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -108,6 +118,42 @@
     @include respond-to('small') {
         grid-template-columns: 1fr;
     }
+}
+
+.selectWrap {
+    position: relative;
+}
+
+.select {
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    background: $color-surface-deep;
+    border-radius: $radius-sm;
+    border: 1px solid transparent;
+    padding: 12px 40px 12px 12px;
+    font-family: inherit;
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    cursor: pointer;
+    outline: none;
+    transition: border-color $transition-base $transition-timing;
+
+    &:focus {
+        border-color: rgba($color-accent, 0.35);
+    }
+}
+
+.selectChevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: $color-text-muted;
+    pointer-events: none;
 }
 
 .csvUploadIcon {

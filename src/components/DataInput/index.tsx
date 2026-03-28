@@ -1,44 +1,53 @@
 import { useEffect, useId, useState } from 'react';
 import { Calendar, ChevronDown, Upload } from 'lucide-react';
+import { useBacktest } from '../../context/BacktestContext';
 import type { StreamPreviewRow } from '../../types/backtest';
+import { EXCHANGE_OPTIONS, INTERVAL_OPTIONS } from '../../data/marketOptions';
 import { parseCsvPreview } from '../../utils/parseCsvPreview';
 import styles from './data-input.module.scss';
 
 export type DataInputTab = 'asset-selection' | 'csv-upload';
 
-export interface AssetRange {
-    symbol: string;
-    startDate: string;
-    endDate: string;
-}
-
 interface DataInputProps {
-    onAssetChange: (data: AssetRange) => void;
     onCsvParsed?: (rows: StreamPreviewRow[]) => void;
-    /** Called when user switches back to asset mode so preview can revert to demo data. */
     onCsvClear?: () => void;
 }
 
-export function DataInput({ onAssetChange, onCsvParsed, onCsvClear }: DataInputProps) {
+export function DataInput({ onCsvParsed, onCsvClear }: DataInputProps) {
+    const { setDataset } = useBacktest();
     const fileInputId = useId();
     const [activeTab, setActiveTab] = useState<DataInputTab>('asset-selection');
     const [symbol, setSymbol] = useState('BTC/USDT');
     const [startDate, setStartDate] = useState('01/01/2023');
     const [endDate, setEndDate] = useState('12/31/2023');
+    const [interval, setInterval] = useState('1h');
+    const [exchange, setExchange] = useState('Binance');
     const [csvFileName, setCsvFileName] = useState<string | null>(null);
     const [csvError, setCsvError] = useState<string | null>(null);
 
     useEffect(() => {
         if (activeTab === 'asset-selection') {
-            onAssetChange({ symbol, startDate, endDate });
+            setDataset({
+                symbol,
+                startDate,
+                endDate,
+                interval,
+                exchange,
+                dataSource: 'exchange',
+                csvFileLabel: null,
+            });
         }
-    }, [symbol, startDate, endDate, activeTab, onAssetChange]);
+    }, [symbol, startDate, endDate, interval, exchange, activeTab, setDataset]);
 
     const selectTab = (tab: DataInputTab) => {
         if (tab === 'asset-selection' && activeTab !== 'asset-selection') {
             onCsvClear?.();
             setCsvFileName(null);
             setCsvError(null);
+            setDataset({ dataSource: 'exchange', csvFileLabel: null });
+        }
+        if (tab === 'csv-upload') {
+            setDataset({ dataSource: 'csv' });
         }
         setActiveTab(tab);
     };
@@ -48,6 +57,7 @@ export function DataInput({ onAssetChange, onCsvParsed, onCsvClear }: DataInputP
         if (!file) return;
         onCsvClear?.();
         setCsvFileName(file.name);
+        setDataset({ dataSource: 'csv', csvFileLabel: file.name });
         const reader = new FileReader();
         reader.onload = () => {
             const text = typeof reader.result === 'string' ? reader.result : '';
@@ -101,6 +111,49 @@ export function DataInput({ onAssetChange, onCsvParsed, onCsvClear }: DataInputP
                                 autoComplete="off"
                             />
                             <ChevronDown className={styles.inputIcon} aria-hidden strokeWidth={2} />
+                        </div>
+                    </div>
+
+                    <div className={styles.metaGrid}>
+                        <div className={styles.field}>
+                            <label className={styles.label} htmlFor="data-interval">
+                                Interval
+                            </label>
+                            <div className={styles.selectWrap}>
+                                <select
+                                    id="data-interval"
+                                    className={styles.select}
+                                    value={interval}
+                                    onChange={(e) => setInterval(e.target.value)}
+                                >
+                                    {INTERVAL_OPTIONS.map((o) => (
+                                        <option key={o.value} value={o.value}>
+                                            {o.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown className={styles.selectChevron} aria-hidden strokeWidth={2} />
+                            </div>
+                        </div>
+                        <div className={styles.field}>
+                            <label className={styles.label} htmlFor="data-exchange">
+                                Exchange
+                            </label>
+                            <div className={styles.selectWrap}>
+                                <select
+                                    id="data-exchange"
+                                    className={styles.select}
+                                    value={exchange}
+                                    onChange={(e) => setExchange(e.target.value)}
+                                >
+                                    {EXCHANGE_OPTIONS.map((o) => (
+                                        <option key={o.value} value={o.value}>
+                                            {o.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown className={styles.selectChevron} aria-hidden strokeWidth={2} />
+                            </div>
                         </div>
                     </div>
 

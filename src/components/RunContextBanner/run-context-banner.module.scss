@@ -1,0 +1,33 @@
+@use '../../scss/abstracts/variables.scss' as *;
+
+.banner {
+    width: 100%;
+    padding: $spacing-3 $spacing-4;
+    margin-bottom: $section-gap-mobile;
+    border-radius: $radius-md;
+    border: 1px solid $color-panel-border;
+    background: rgba(16, 20, 25, 0.65);
+}
+
+.line {
+    margin: 0;
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
+    letter-spacing: -0.02em;
+    color: $color-text-primary;
+    line-height: 1.45;
+}
+
+.sep {
+    color: $color-text-muted;
+    font-weight: $font-weight-normal;
+    padding: 0 $spacing-1;
+}
+
+.meta {
+    display: block;
+    margin-top: $spacing-1;
+    font-size: $text-xs;
+    font-weight: $font-weight-normal;
+    color: $color-text-secondary;
+}

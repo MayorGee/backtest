@@ -1,0 +1,36 @@
+@use '../../scss/abstracts/mixins.scss' as *;
+@use '../../scss/abstracts/variables.scss' as *;
+
+.wrap {
+    width: 100%;
+}
+
+.panel {
+    padding: $spacing-8 $spacing-6;
+    border-radius: $radius-md;
+    border: 1px solid $color-panel-border;
+    background: $color-panel-bg;
+    text-align: center;
+}
+
+.title {
+    margin: 0 0 $spacing-3;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
+    letter-spacing: -0.02em;
+    color: $color-text-primary;
+}
+
+.body {
+    margin: 0 auto;
+    max-width: 28rem;
+    font-size: $text-sm;
+    line-height: 1.55;
+    color: $color-text-secondary;
+}
+
+.hint {
+    margin: $spacing-4 0 0;
+    font-size: $text-xs;
+    color: $color-text-muted;
+}

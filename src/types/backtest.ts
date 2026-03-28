@@ -20,6 +20,21 @@ export interface OhlcvBar {
 
 export type StrategyId = 'buy_hold' | 'sma_crossover' | 'rsi';
 
+/** Exchange API vs uploaded OHLCV. */
+export type DataSourceMode = 'exchange' | 'csv';
+
+/** Dataset selection shown in the run context line and sent to the API later. */
+export interface DatasetConfig {
+    symbol: string;
+    startDate: string;
+    endDate: string;
+    interval: string;
+    exchange: string;
+    dataSource: DataSourceMode;
+    /** File name when `dataSource === 'csv'`. */
+    csvFileLabel: string | null;
+}
+
 export interface StrategyParams {
     strategy: StrategyId;
     /** Strategy-specific keys filled in per strategy UI */
