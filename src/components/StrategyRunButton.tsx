@@ -1,5 +1,5 @@
 import { Rocket } from 'lucide-react';
-import { useBacktest } from '../../context/BacktestContext';
+import { useBacktest } from '../context/BacktestContext';
 import styles from './strategy-run-button.module.scss';
 
 export function StrategyRunButton() {

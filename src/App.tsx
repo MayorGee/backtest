@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { BacktestProvider } from './context/BacktestContext';
 import { StrategyLogic } from './components/StrategyLogic';
+import { PerformanceMetrics } from './components/PerformanceMetrics';
 import { StrategyRunButton } from './components/StrategyRunButton';
 import { DataInput, type AssetRange } from './components/DataInput';
 import { DataStreamPreview, type DataStreamSource } from './components/DataStreamPreview';
@@ -62,6 +63,7 @@ function App() {
                                     </div>
                                 </div>
                             </div>
+                            <PerformanceMetrics />
                         </div>
                     </main>
                     <MobileBottomNav />
