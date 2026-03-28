@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
-import { BacktestProvider } from './context/BacktestProvider';
+import { BacktestProvider } from './context/BacktestContext';
+import { StrategyLogic } from './components/StrategyLogic';
+import { StrategyRunButton } from './components/StrategyRunButton';
 import { DataInput, type AssetRange } from './components/DataInput';
 import { DataStreamPreview, type DataStreamSource } from './components/DataStreamPreview';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -41,13 +43,25 @@ function App() {
                 <div className="app__main">
                     <TopBar activeTab={mainTab} onTabChange={setMainTab} />
                     <main className="app__content">
-                        <div className="app__workspace">
-                            <DataInput
-                                onAssetChange={handleAssetChange}
-                                onCsvParsed={handleCsvParsed}
-                                onCsvClear={handleCsvClear}
-                            />
-                            <DataStreamPreview rows={streamRows} source={streamSource} />
+                        <div className="app__section">
+                            <div className="app__workspace">
+                                <DataInput
+                                    onAssetChange={handleAssetChange}
+                                    onCsvParsed={handleCsvParsed}
+                                    onCsvClear={handleCsvClear}
+                                />
+                                <DataStreamPreview rows={streamRows} source={streamSource} />
+                            </div>
+                            <div className="app__strategyStrip">
+                                <div className="app__strategyBar">
+                                    <div className="app__strategyBarMain">
+                                        <StrategyLogic />
+                                    </div>
+                                    <div className="app__strategyBarRun">
+                                        <StrategyRunButton />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </main>
                     <MobileBottomNav />
