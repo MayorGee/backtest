@@ -1,0 +1,155 @@
+@use '../../scss/abstracts/variables.scss' as *;
+@use '../../scss/abstracts/mixins.scss' as *;
+
+.section {
+    width: 100%;
+}
+
+.title {
+    margin: 0 0 $spacing-4;
+    font-size: $text-2xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: $color-text-muted;
+}
+
+.panel {
+    background: $color-panel-bg;
+    border: 1px solid $color-panel-border;
+    border-radius: $radius-md;
+    padding: $spacing-5 $spacing-5 $spacing-4;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+}
+
+.heading {
+    margin: 0;
+    font-size: $text-base;
+    font-weight: $font-weight-semibold;
+    letter-spacing: -0.02em;
+    color: $color-text-primary;
+}
+
+.toggleGroup {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: $radius-sm;
+    background: $color-surface-deep;
+    border: 1px solid $color-border-subtle;
+}
+
+.toggle {
+    padding: 6px 14px;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    font-family: inherit;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition:
+        color $transition-base $transition-timing,
+        background $transition-base $transition-timing;
+
+    &:hover {
+        color: $color-text-secondary;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $color-accent;
+        outline-offset: 2px;
+    }
+}
+
+.toggleActive {
+    color: $color-text-primary;
+    background: $chart-toggle-bg;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.chartWrap {
+    width: 100%;
+    height: 300px;
+
+    @include min-width('medium') {
+        height: 340px;
+    }
+}
+
+.tooltip {
+    padding: $spacing-3 $spacing-4;
+    border-radius: $radius-sm;
+    background: rgba(14, 17, 22, 0.95);
+    border: 1px solid $color-border-subtle;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    font-size: $text-xs;
+    line-height: 1.45;
+}
+
+.tooltipDate {
+    margin: 0 0 $spacing-2;
+    font-size: $text-2xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $color-text-muted;
+}
+
+.tooltipRow {
+    margin: 0;
+    color: $color-text-primary;
+    font-variant-numeric: tabular-nums;
+}
+
+.tooltipDrawdown {
+    margin: $spacing-1 0 0;
+    color: $color-danger;
+    font-variant-numeric: tabular-nums;
+}
+
+.empty {
+    margin: 0;
+    padding: $spacing-8 $spacing-4;
+    text-align: center;
+    font-size: $text-sm;
+    color: $color-text-secondary;
+    background: rgba($color-surface-deep, 0.35);
+    border: 1px dashed $color-panel-border;
+    border-radius: $radius-md;
+}
+
+.skeleton {
+    height: 300px;
+    border-radius: $radius-sm;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+    border: 1px solid $color-panel-border;
+
+    @include min-width('medium') {
+        height: 340px;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
+}
