@@ -1,4 +1,4 @@
-import type { DisplayMetric, EquityChartPoint } from '../types/backtest';
+import type { DisplayMetric, EquityChartPoint, ExecutionLogRow } from '../types/backtest';
 
 export const MOCK_EQUITY_DATA: EquityChartPoint[] = [
     { date: 'Jan', equity: 10000, drawdown: 0 },
@@ -13,6 +13,36 @@ export const MOCK_EQUITY_DATA: EquityChartPoint[] = [
     { date: 'Oct', equity: 14100, drawdown: -1.1 },
     { date: 'Nov', equity: 14240, drawdown: -2.1 },
     { date: 'Dec', equity: 15000, drawdown: -0.5 },
+];
+
+export const MOCK_EXECUTION_LOG: ExecutionLogRow[] = [
+    {
+        id: '1',
+        asset: 'BTC/USDT',
+        side: 'long',
+        entryPrice: 42124.5,
+        exitPrice: 42880.0,
+        pnlUsd: 1562.2,
+        status: 'profit',
+    },
+    {
+        id: '2',
+        asset: 'BTC/USDT',
+        side: 'short',
+        entryPrice: 43210.0,
+        exitPrice: 43555.0,
+        pnlUsd: -335.0,
+        status: 'loss',
+    },
+    {
+        id: '3',
+        asset: 'BTC/USDT',
+        side: 'long',
+        entryPrice: 41800.25,
+        exitPrice: 42450.75,
+        pnlUsd: 2425.1,
+        status: 'profit',
+    },
 ];
 
 export const MOCK_METRICS: DisplayMetric[] = [

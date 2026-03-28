@@ -6,7 +6,7 @@ import {
     useReducer,
     type ReactNode,
 } from 'react';
-import { MOCK_EQUITY_DATA, MOCK_METRICS } from '../data/dashboardMock';
+import { MOCK_EQUITY_DATA, MOCK_EXECUTION_LOG, MOCK_METRICS } from '../data/dashboardMock';
 import type { StrategyId } from '../types/backtest';
 import {
     backtestReducer,
@@ -44,6 +44,7 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
             type: 'RUN_SUCCESS',
             metrics: MOCK_METRICS,
             equity: MOCK_EQUITY_DATA,
+            executions: MOCK_EXECUTION_LOG,
         });
     }, []);
 

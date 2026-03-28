@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { BacktestProvider } from './context/BacktestContext';
 import { StrategyLogic } from './components/StrategyLogic';
 import { EquityCurveCard } from './components/EquityCurveCard';
+import { RecentExecutionLog } from './components/RecentExecutionLog';
 import { PerformanceMetrics } from './components/PerformanceMetrics';
 import { StrategyRunButton } from './components/StrategyRunButton';
 import { DataInput, type AssetRange } from './components/DataInput';
@@ -66,6 +67,7 @@ function App() {
                             </div>
                             <PerformanceMetrics />
                             <EquityCurveCard />
+                            <RecentExecutionLog />
                         </div>
                     </main>
                     <MobileBottomNav />

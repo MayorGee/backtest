@@ -78,3 +78,17 @@ export interface EquityChartPoint {
     equity: number;
     drawdown: number;
 }
+
+/** Recent execution log row (tablet / results table). */
+export type ExecutionSide = 'long' | 'short';
+export type ExecutionOutcome = 'profit' | 'loss';
+
+export interface ExecutionLogRow {
+    id: string;
+    asset: string;
+    side: ExecutionSide;
+    entryPrice: number;
+    exitPrice: number;
+    pnlUsd: number;
+    status: ExecutionOutcome;
+}

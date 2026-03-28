@@ -1,4 +1,4 @@
-import type { DisplayMetric, EquityChartPoint, StrategyId } from '../types/backtest';
+import type { DisplayMetric, EquityChartPoint, ExecutionLogRow, StrategyId } from '../types/backtest';
 
 export interface BacktestParams {
     fastPeriod: number;
@@ -15,13 +15,19 @@ export interface BacktestState {
     /** Populated after a successful run (mock or API). */
     displayMetrics: DisplayMetric[] | null;
     equitySeries: EquityChartPoint[] | null;
+    executionLog: ExecutionLogRow[] | null;
 }
 
 export type BacktestAction =
     | { type: 'SET_STRATEGY'; strategyId: StrategyId }
     | { type: 'SET_PARAM'; key: keyof BacktestParams; value: number }
     | { type: 'RUN_START' }
-    | { type: 'RUN_SUCCESS'; metrics: DisplayMetric[]; equity: EquityChartPoint[] }
+    | {
+          type: 'RUN_SUCCESS';
+          metrics: DisplayMetric[];
+          equity: EquityChartPoint[];
+          executions: ExecutionLogRow[];
+      }
     | { type: 'RUN_FAIL' };
 
 export const defaultBacktestParams: BacktestParams = {
@@ -38,6 +44,7 @@ export const initialBacktestState: BacktestState = {
     runStatus: 'idle',
     displayMetrics: null,
     equitySeries: null,
+    executionLog: null,
 };
 
 export function backtestReducer(state: BacktestState, action: BacktestAction): BacktestState {
@@ -57,6 +64,7 @@ export function backtestReducer(state: BacktestState, action: BacktestAction): B
                 runStatus: 'done',
                 displayMetrics: action.metrics,
                 equitySeries: action.equity,
+                executionLog: action.executions,
             };
         case 'RUN_FAIL':
             return { ...state, runStatus: 'idle' };
