@@ -1,0 +1,30 @@
+@use '../../scss/abstracts/variables.scss' as *;
+@use '../../scss/abstracts/mixins.scss' as *;
+
+.shell {
+    width: 100%;
+}
+
+.header {
+    margin-bottom: $spacing-6;
+
+    @include min-width('large') {
+        margin-bottom: $spacing-8;
+    }
+}
+
+.title {
+    margin: 0;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
+    letter-spacing: -0.03em;
+    color: $color-text-primary;
+}
+
+.subtitle {
+    margin: $spacing-2 0 0;
+    max-width: 42rem;
+    font-size: $text-sm;
+    line-height: 1.5;
+    color: $color-text-secondary;
+}

@@ -10,6 +10,7 @@ import {
     TrendingUp,
     type LucideIcon,
 } from 'lucide-react';
+import type { AppView } from '../../types/navigation';
 import styles from './sidebar.module.scss';
 
 type NavId =
@@ -34,7 +35,21 @@ const ADVANCED: { id: NavId; label: string; icon: LucideIcon }[] = [
     { id: 'ga', label: 'GA Optimizer', icon: Gauge },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+    activeView: AppView;
+    onNavigate: (view: AppView) => void;
+}
+
+function navIdToView(id: NavId): AppView {
+    return id;
+}
+
+function isPrimaryActive(view: AppView, id: NavId): boolean {
+    if (id === 'dashboard') return view === 'dashboard';
+    return view === id;
+}
+
+export function Sidebar({ activeView, onNavigate }: SidebarProps) {
     return (
         <aside className={styles.sidebar} aria-label="Primary navigation">
             <div className={styles.brandBlock}>
@@ -51,7 +66,10 @@ export function Sidebar() {
                         <li key={id}>
                             <button
                                 type="button"
-                                className={id === 'dashboard' ? styles.navBtnActive : styles.navBtn}
+                                className={
+                                    isPrimaryActive(activeView, id) ? styles.navBtnActive : styles.navBtn
+                                }
+                                onClick={() => onNavigate(navIdToView(id))}
                             >
                                 <Icon className={styles.navIcon} size={18} strokeWidth={1.75} aria-hidden />
                                 <span>{label}</span>
@@ -64,7 +82,11 @@ export function Sidebar() {
                 <ul className={styles.list}>
                     {ADVANCED.map(({ id, label, icon: Icon }) => (
                         <li key={id}>
-                            <button type="button" className={styles.navBtn}>
+                            <button
+                                type="button"
+                                className={activeView === id ? styles.navBtnActive : styles.navBtn}
+                                onClick={() => onNavigate(navIdToView(id))}
+                            >
                                 <Icon className={styles.navIcon} size={18} strokeWidth={1.75} aria-hidden />
                                 <span>{label}</span>
                             </button>
@@ -74,11 +96,19 @@ export function Sidebar() {
             </nav>
 
             <div className={styles.footer}>
-                <button type="button" className={styles.footerLink}>
+                <button
+                    type="button"
+                    className={activeView === 'settings' ? styles.footerLinkActive : styles.footerLink}
+                    onClick={() => onNavigate('settings')}
+                >
                     <Settings size={16} strokeWidth={1.75} aria-hidden />
                     Settings
                 </button>
-                <button type="button" className={styles.footerLink}>
+                <button
+                    type="button"
+                    className={activeView === 'documentation' ? styles.footerLinkActive : styles.footerLink}
+                    onClick={() => onNavigate('documentation')}
+                >
                     <BookOpen size={16} strokeWidth={1.75} aria-hidden />
                     Documentation
                 </button>

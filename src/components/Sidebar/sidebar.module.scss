@@ -144,7 +144,8 @@
     border-top: 1px solid $color-border-subtle;
 }
 
-.footerLink {
+.footerLink,
+.footerLinkActive {
     display: inline-flex;
     align-items: center;
     gap: $spacing-2;
@@ -171,4 +172,9 @@
         outline: 2px solid $color-accent;
         outline-offset: 2px;
     }
+}
+
+.footerLinkActive {
+    color: $color-text-primary;
+    background: rgba(124, 158, 255, 0.08);
 }
