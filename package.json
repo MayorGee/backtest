@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^0.544.0",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "recharts": "^2.15.4",
+    "sass": "^1.93.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",

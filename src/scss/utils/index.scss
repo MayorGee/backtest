@@ -1,0 +1,22 @@
+@use '../abstracts/variables.scss' as *;
+@use '../abstracts/mixins.scss' as *;
+
+.util-visually-hidden {
+    @include visually-hidden;
+}
+
+.util-flex-center {
+    @include flex-center;
+}
+
+.util-flex-between {
+    @include flex-between;
+}
+
+.util-text-muted {
+    color: $color-text-muted;
+}
+
+.util-text-secondary {
+    color: $color-text-secondary;
+}

@@ -1,0 +1,77 @@
+@use '../../scss/abstracts/variables.scss' as *;
+@use '../../scss/abstracts/mixins.scss' as *;
+
+.nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 35;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    min-height: $mobile-bottom-nav-height;
+    padding: $spacing-2 $spacing-2 calc(#{$spacing-2} + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid $color-border-subtle;
+    background: rgba(12, 14, 18, 0.94);
+    backdrop-filter: blur(14px);
+
+    @include min-width('large') {
+        display: none;
+    }
+}
+
+.item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    padding: $spacing-1 $spacing-1;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition:
+        color $transition-base $transition-timing,
+        background $transition-base $transition-timing;
+
+    &:hover {
+        color: $color-text-secondary;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $color-accent;
+        outline-offset: 2px;
+    }
+}
+
+.itemActive {
+    color: $color-electric;
+
+    .icon {
+        color: $color-electric;
+    }
+}
+
+.icon {
+    display: flex;
+    color: $color-text-secondary;
+    transition: color $transition-base $transition-timing;
+}
+
+.label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}

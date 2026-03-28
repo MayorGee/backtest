@@ -1,0 +1,58 @@
+@use '../../scss/abstracts/variables.scss' as *;
+@use '../../scss/abstracts/mixins.scss' as *;
+
+.bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    min-height: $mobile-header-height;
+    padding: $spacing-2 $main-padding-mobile;
+    border-bottom: 1px solid $color-border-subtle;
+    background: rgba(12, 14, 18, 0.94);
+    backdrop-filter: blur(14px);
+
+    @include min-width('large') {
+        display: none;
+    }
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+}
+
+.brandMark {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, $color-electric, $color-violet);
+    box-shadow: 0 0 10px rgba(77, 142, 255, 0.35);
+}
+
+.titles {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.title {
+    font-size: $text-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: -0.02em;
+    color: $color-text-primary;
+}
+
+.subtitle {
+    font-size: 9px;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $color-text-muted;
+}

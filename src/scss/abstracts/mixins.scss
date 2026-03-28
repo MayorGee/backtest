@@ -1,0 +1,85 @@
+@use 'sass:color';
+@use './variables' as *;
+
+@mixin respond-to($size) {
+    @if $size == 'small' {
+        @media (max-width: $breakpoint-sm) {
+            @content;
+        }
+    } @else if $size == 'medium' {
+        @media (max-width: $breakpoint-md) {
+            @content;
+        }
+    } @else if $size == 'large' {
+        @media (max-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else if $size == 'xlarge' {
+        @media (max-width: $breakpoint-xl) {
+            @content;
+        }
+    } @else if $size == '2xlarge' {
+        @media (max-width: $breakpoint-2xl) {
+            @content;
+        }
+    } @else {
+        @error "Breakpoint #{$size} not found.";
+    }
+}
+
+@mixin min-width($size) {
+    @if $size == 'small' {
+        @media (min-width: $breakpoint-sm) {
+            @content;
+        }
+    } @else if $size == 'medium' {
+        @media (min-width: $breakpoint-md) {
+            @content;
+        }
+    } @else if $size == 'large' {
+        @media (min-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else if $size == 'xlarge' {
+        @media (min-width: $breakpoint-xl) {
+            @content;
+        }
+    } @else if $size == '2xlarge' {
+        @media (min-width: $breakpoint-2xl) {
+            @content;
+        }
+    } @else {
+        @error "Breakpoint #{$size} not found.";
+    }
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@mixin card-surface {
+    background: $color-surface-card;
+    border: 1px solid $color-border-subtle;
+    border-radius: $radius-md;
+    backdrop-filter: blur(12px);
+}
