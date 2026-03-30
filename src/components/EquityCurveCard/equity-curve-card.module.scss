@@ -110,10 +110,60 @@
     font-variant-numeric: tabular-nums;
 }
 
-.tooltipDrawdown {
+.tooltipVsStartUp {
+    margin: $spacing-1 0 0;
+    color: $color-metric-profit;
+    font-variant-numeric: tabular-nums;
+    font-size: $text-2xs;
+}
+
+.tooltipVsStartDown {
     margin: $spacing-1 0 0;
     color: $color-danger;
     font-variant-numeric: tabular-nums;
+    font-size: $text-2xs;
+}
+
+.tooltipDdLabel {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $spacing-3;
+    margin: $spacing-2 0 0;
+    padding-top: $spacing-2;
+    border-top: 1px solid $color-border-subtle;
+    font-variant-numeric: tabular-nums;
+    font-size: $text-xs;
+}
+
+.tooltipDdTitle {
+    color: $color-text-muted;
+    font-size: $text-2xs;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.tooltipDdValue {
+    font-weight: $font-weight-semibold;
+}
+
+.tooltipDdAtPeak .tooltipDdValue {
+    color: $color-text-secondary;
+}
+
+.tooltipDdMild .tooltipDdValue {
+    color: $color-warning;
+}
+
+.tooltipDdSevere .tooltipDdValue {
+    color: $color-danger;
+}
+
+.tooltipHint {
+    margin: $spacing-2 0 0;
+    font-size: 10px;
+    line-height: 1.35;
+    color: $color-text-muted;
 }
 
 .empty {

@@ -7,7 +7,6 @@ import {
     Tooltip,
     XAxis,
     YAxis,
-    type TooltipProps,
 } from 'recharts';
 import { useBacktest } from '../../context/BacktestContext';
 import type { EquityChartPoint } from '../../types/backtest';
@@ -25,17 +24,28 @@ function formatY(v: number): string {
     return `${Math.round(v)}`;
 }
 
-function EquityTooltip({
-    active,
-    payload,
-}: TooltipProps<number, string> & { payload?: { payload: EquityChartPoint }[] }) {
-    if (!active || !payload?.[0]) return null;
-    const p = payload[0].payload as EquityChartPoint;
+function equityTooltipDrawdownClass(dd: number): string {
+    // dd is ≤ 0 by convention (0 = at running peak).
+    if (dd >= -0.05) return styles.tooltipDdAtPeak;
+    if (dd > -8) return styles.tooltipDdMild;
+    return styles.tooltipDdSevere;
+}
+
+function EquityTooltipBody({ p, baselineEquity }: { p: EquityChartPoint; baselineEquity: number }) {
+    const vsStartPct =
+        baselineEquity > 0 ? ((p.equity - baselineEquity) / baselineEquity) * 100 : 0;
+    const vsStartClass = vsStartPct >= 0 ? styles.tooltipVsStartUp : styles.tooltipVsStartDown;
+
     return (
         <div className={styles.tooltip}>
             <p className={styles.tooltipDate}>{p.date}</p>
             <p className={styles.tooltipRow}>Equity: {usd.format(p.equity)}</p>
-            <p className={styles.tooltipDrawdown}>Drawdown: {p.drawdown.toFixed(1)}%</p>
+            <p className={vsStartClass}>vs first plotted bar: {vsStartPct >= 0 ? '+' : ''}{vsStartPct.toFixed(2)}%</p>
+            <p className={`${styles.tooltipDdLabel} ${equityTooltipDrawdownClass(p.drawdown)}`}>
+                <span className={styles.tooltipDdTitle}>Drawdown from peak</span>
+                <span className={styles.tooltipDdValue}>{p.drawdown.toFixed(1)}%</span>
+            </p>
+            <p className={styles.tooltipHint}>(Peak = highest equity so far on this curve.)</p>
         </div>
     );
 }
@@ -54,6 +64,8 @@ export function EquityCurveCard() {
         const floor = Math.max(minE * 0.92, 1);
         return [floor, 'auto'];
     }, [equitySeries]);
+
+    const baselineEquity = equitySeries?.[0]?.equity ?? 0;
 
     if (runStatus === 'running') {
         return (
@@ -127,7 +139,16 @@ export function EquityCurveCard() {
                                 tickFormatter={formatY}
                                 width={44}
                             />
-                            <Tooltip content={<EquityTooltip />} cursor={{ stroke: 'rgba(124,158,255,0.35)' }} />
+                            <Tooltip
+                                content={(tipProps) => {
+                                    if (!tipProps.active || !tipProps.payload?.[0]) return null;
+                                    const p = tipProps.payload[0].payload as EquityChartPoint;
+                                    return (
+                                        <EquityTooltipBody p={p} baselineEquity={baselineEquity} />
+                                    );
+                                }}
+                                cursor={{ stroke: 'rgba(124,158,255,0.35)' }}
+                            />
                             <Area
                                 type="monotone"
                                 dataKey="equity"
