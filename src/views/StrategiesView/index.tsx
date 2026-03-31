@@ -1,6 +1,7 @@
 import { PageShell } from '../../components/PageShell';
 import { useBacktest } from '../../context/BacktestContext';
-import { builtInCards, STRATEGY_TEMPLATES } from '../../data/strategyLibrary';
+import { allStrategyLibraryRows, templatePresetSummary } from '../../data/strategyLibrary';
+import { strategyLabel } from '../../data/strategies';
 import type { AppView } from '../../types/navigation';
 import type { StrategyId } from '../../types/backtest';
 import styles from './strategies-view.module.scss';
@@ -10,9 +11,9 @@ interface StrategiesViewProps {
 }
 
 export function StrategiesView({ onNavigate }: StrategiesViewProps) {
-    const { setStrategyId } = useBacktest();
+    const { setStrategyId, applyStrategyPreset } = useBacktest();
 
-    const applyStrategy = (strategyId: StrategyId) => {
+    const useInForge = (strategyId: StrategyId) => {
         setStrategyId(strategyId);
         onNavigate('dashboard');
     };
@@ -20,16 +21,30 @@ export function StrategiesView({ onNavigate }: StrategiesViewProps) {
     return (
         <PageShell
             title="Strategies"
-            subtitle="Built-in logic you can ship to the Forge, plus starter templates. Selection updates the backtest bar—runs still use mock output until the API is connected."
+            subtitle="Built-in engines plus templates with preset parameters. “Use” keeps your current numbers; templates apply the listed defaults and open the Forge."
         >
-            <h2 className={styles.sectionLabel}>Built-in</h2>
             <div className={styles.grid}>
-                {builtInCards().map((card) => (
-                    <article key={card.strategyId} className={styles.card}>
+                {allStrategyLibraryRows().map((card) => (
+                    <article
+                        key={card.kind === 'builtin' ? card.strategyId : card.id}
+                        className={styles.card}
+                    >
                         <div className={styles.cardHeader}>
                             <h3 className={styles.cardTitle}>{card.name}</h3>
-                            <span className={styles.badge}>Built-in</span>
+                            <span
+                                className={`${styles.badge} ${
+                                    card.kind === 'template' ? styles.badgeTemplate : ''
+                                }`}
+                            >
+                                {card.kind === 'builtin' ? 'Built-in' : 'Template'}
+                            </span>
                         </div>
+                        <p className={styles.engineLine}>
+                            Engine: <strong>{strategyLabel(card.strategyId)}</strong>
+                        </p>
+                        {card.kind === 'template' && (
+                            <p className={styles.presetLine}>{templatePresetSummary(card)}</p>
+                        )}
                         <p className={styles.desc}>{card.description}</p>
                         <div className={styles.tags}>
                             {card.tags.map((t) => (
@@ -39,45 +54,35 @@ export function StrategiesView({ onNavigate }: StrategiesViewProps) {
                             ))}
                         </div>
                         <div className={styles.actions}>
-                            <button
-                                type="button"
-                                className={styles.useBtn}
-                                onClick={() => applyStrategy(card.strategyId)}
-                            >
-                                Use in Forge
-                            </button>
-                            <button type="button" className={styles.ghostBtn} onClick={() => onNavigate('dashboard')}>
-                                Open dashboard
-                            </button>
-                        </div>
-                    </article>
-                ))}
-            </div>
-
-            <h2 className={styles.sectionLabel}>Templates</h2>
-            <div className={styles.grid}>
-                {STRATEGY_TEMPLATES.map((card) => (
-                    <article key={card.id} className={styles.card}>
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.cardTitle}>{card.name}</h3>
-                            <span className={`${styles.badge} ${styles.badgeTemplate}`}>Template</span>
-                        </div>
-                        <p className={styles.desc}>{card.description}</p>
-                        <div className={styles.tags}>
-                            {card.tags.map((t) => (
-                                <span key={t} className={styles.tag}>
-                                    {t}
-                                </span>
-                            ))}
-                        </div>
-                        <div className={styles.actions}>
-                            <button
-                                type="button"
-                                className={styles.useBtn}
-                                onClick={() => applyStrategy(card.strategyId)}
-                            >
-                                Apply template
-                            </button>
+                            {card.kind === 'builtin' ? (
+                                <>
+                                    <button
+                                        type="button"
+                                        className={styles.useBtn}
+                                        onClick={() => useInForge(card.strategyId)}
+                                    >
+                                        Use in Forge
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={styles.ghostBtn}
+                                        onClick={() => onNavigate('dashboard')}
+                                    >
+                                        Open dashboard
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className={styles.useBtn}
+                                    onClick={() => {
+                                        applyStrategyPreset(card.strategyId, card.presetParams);
+                                        onNavigate('dashboard');
+                                    }}
+                                >
+                                    Apply template in Forge
+                                </button>
+                            )}
                         </div>
                     </article>
                 ))}

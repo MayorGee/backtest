@@ -46,6 +46,11 @@ export interface BacktestState {
 
 export type BacktestAction =
     | { type: 'SET_STRATEGY'; strategyId: StrategyId }
+    | {
+          type: 'APPLY_STRATEGY_PRESET';
+          strategyId: StrategyId;
+          params: Partial<BacktestParams>;
+      }
     | { type: 'SET_PARAM'; key: keyof BacktestParams; value: number }
     | { type: 'SET_PORTFOLIO'; partial: Partial<PortfolioSettings> }
     | { type: 'SET_DATASET'; partial: Partial<DatasetConfig> }
@@ -115,6 +120,12 @@ export function backtestReducer(state: BacktestState, action: BacktestAction): B
     switch (action.type) {
         case 'SET_STRATEGY':
             return { ...state, strategyId: action.strategyId };
+        case 'APPLY_STRATEGY_PRESET':
+            return {
+                ...state,
+                strategyId: action.strategyId,
+                params: { ...state.params, ...action.params },
+            };
         case 'SET_PARAM':
             return {
                 ...state,

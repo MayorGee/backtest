@@ -25,6 +25,7 @@ interface BacktestContextValue {
     state: BacktestState;
     dispatch: React.Dispatch<BacktestAction>;
     setStrategyId: (id: StrategyId) => void;
+    applyStrategyPreset: (id: StrategyId, params: Partial<BacktestParams>) => void;
     setParam: (key: keyof BacktestParams, value: number) => void;
     setPortfolio: (partial: Partial<PortfolioSettings>) => void;
     setDataset: (partial: Partial<DatasetConfig>) => void;
@@ -71,6 +72,10 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
 
     const setStrategyId = useCallback((strategyId: StrategyId) => {
         dispatch({ type: 'SET_STRATEGY', strategyId });
+    }, []);
+
+    const applyStrategyPreset = useCallback((strategyId: StrategyId, params: Partial<BacktestParams>) => {
+        dispatch({ type: 'APPLY_STRATEGY_PRESET', strategyId, params });
     }, []);
 
     const setParam = useCallback((key: keyof BacktestParams, value: number) => {
@@ -168,6 +173,7 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
             state,
             dispatch,
             setStrategyId,
+            applyStrategyPreset,
             setParam,
             setPortfolio,
             setDataset,
@@ -178,6 +184,7 @@ export function BacktestProvider({ children }: { children: ReactNode }) {
         [
             state,
             setStrategyId,
+            applyStrategyPreset,
             setParam,
             setPortfolio,
             setDataset,

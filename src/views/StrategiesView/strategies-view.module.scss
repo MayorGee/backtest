@@ -1,19 +1,9 @@
 @use '../../scss/abstracts/variables.scss' as *;
 @use '../../scss/abstracts/mixins.scss' as *;
 
-.sectionLabel {
-    margin: 0 0 $spacing-4;
-    font-size: $text-2xs;
-    font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: $color-text-muted;
-}
-
 .grid {
     display: grid;
     gap: $spacing-4;
-    margin-bottom: $spacing-8;
 
     @include min-width('medium') {
         grid-template-columns: repeat(2, 1fr);
@@ -50,6 +40,19 @@
     font-weight: $font-weight-semibold;
     color: $color-text-primary;
     letter-spacing: -0.02em;
+}
+
+.engineLine {
+    margin: 0 0 $spacing-1;
+    font-size: $text-xs;
+    color: $color-text-secondary;
+}
+
+.presetLine {
+    margin: 0 0 $spacing-3;
+    font-size: $text-2xs;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    color: $color-accent;
 }
 
 .badge {

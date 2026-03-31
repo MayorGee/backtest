@@ -2,7 +2,8 @@ import { useBacktest } from '../../context/BacktestContext';
 import type { StreamPreviewRow } from '../../types/backtest';
 import styles from './data-stream-preview.module.scss';
 
-const DEMO_ROWS: StreamPreviewRow[] = [
+/** Shown only when using exchange path; clarifies that rows are not live market data. */
+const EXCHANGE_DEMO_ROWS: StreamPreviewRow[] = [
     {
         timestamp: '2023-12-31 23:59',
         open: '42124.50',
@@ -45,37 +46,48 @@ function closeCellClass(open: string, close: string): string {
 
 const MAX_PREVIEW_ROWS = 12;
 
-export type DataStreamSource = 'demo' | 'csv';
-
 export function DataStreamPreview() {
     const { state } = useBacktest();
     const { dataset, csvPreviewRows } = state;
     const isCsv = dataset.dataSource === 'csv';
-    const source: DataStreamSource = isCsv ? 'csv' : 'demo';
-    const displayRows: StreamPreviewRow[] = isCsv ? (csvPreviewRows ?? []) : DEMO_ROWS;
+    const displayRows: StreamPreviewRow[] = isCsv ? (csvPreviewRows ?? []) : EXCHANGE_DEMO_ROWS;
     const visible = displayRows.slice(0, MAX_PREVIEW_ROWS);
 
-    const badge =
-        source === 'demo' ? (
-            <span className={`${styles.badge} ${styles.badgeOk}`}>Live Feed OK</span>
-        ) : (
-            <span className={`${styles.badge} ${styles.badgeCsv}`}>
-                CSV · {displayRows.length} row{displayRows.length === 1 ? '' : 's'}
-            </span>
-        );
+    const badge = isCsv ? (
+        <span className={`${styles.badge} ${styles.badgeCsv}`}>
+            CSV · {displayRows.length} row{displayRows.length === 1 ? '' : 's'} parsed
+        </span>
+    ) : (
+        <span className={`${styles.badge} ${styles.badgeDemo}`}>Sample table only</span>
+    );
 
     return (
         <div className={styles.panel}>
             <div className={styles.header}>
-                <h3 className={styles.title}>Data Stream Preview</h3>
-                {visible.length > 0 || source === 'csv' ? badge : null}
+                <h3 className={styles.title}>OHLCV preview</h3>
+                {visible.length > 0 || isCsv ? badge : null}
             </div>
+
+            <p className={styles.explainer}>
+                {isCsv ? (
+                    <>
+                        First rows of your upload—used to build the request to the API when you run a backtest. Fix CSV
+                        errors in the data panel if the row count reads zero.
+                    </>
+                ) : (
+                    <>
+                        Real candles are not streamed in the browser. When you <strong>Run backtest</strong>, the API
+                        fetches Binance klines for your symbol and range (or uses your CSV if you switch to upload). This
+                        table is only a layout example.
+                    </>
+                )}
+            </p>
 
             {visible.length === 0 ? (
                 <p className={styles.empty}>
-                    {source === 'csv'
+                    {isCsv
                         ? 'No rows yet — choose a valid OHLCV CSV in the data panel.'
-                        : 'No rows to preview.'}
+                        : 'No preview rows.'}
                 </p>
             ) : (
                 <div className={styles.tableWrap}>

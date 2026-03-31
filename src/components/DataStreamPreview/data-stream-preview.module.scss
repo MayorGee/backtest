@@ -27,7 +27,7 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-6;
+    margin-bottom: $spacing-3;
     gap: $spacing-4;
 }
 
@@ -46,14 +46,21 @@
     font-weight: $font-weight-medium;
 }
 
-.badgeOk {
-    background: $color-stream-live-bg;
-    color: $color-stream-live;
+.badgeDemo {
+    background: rgba($color-text-muted, 0.12);
+    color: $color-text-secondary;
 }
 
 .badgeCsv {
     background: $color-accent-soft;
     color: $color-accent;
+}
+
+.explainer {
+    margin: 0 0 $spacing-5;
+    font-size: $text-xs;
+    line-height: 1.45;
+    color: $color-text-secondary;
 }
 
 .tableWrap {

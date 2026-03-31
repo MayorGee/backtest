@@ -3,7 +3,6 @@ import { BacktestProvider } from './context/BacktestContext';
 import { DataInput } from './components/DataInput';
 import { DataStreamPreview } from './components/DataStreamPreview';
 import { EquityCurveCard } from './components/EquityCurveCard';
-import { ForgeModePlaceholder } from './components/ForgeModePlaceholder';
 import { MobileBottomNav, type MobileNavId } from './components/MobileBottomNav';
 import { MobileNav } from './components/MobileNav';
 import { PerformanceMetrics } from './components/PerformanceMetrics';
@@ -12,7 +11,7 @@ import { RunContextBanner } from './components/RunContextBanner';
 import { Sidebar } from './components/Sidebar';
 import { StrategyLogic } from './components/StrategyLogic';
 import { StrategyRunButton } from './components/StrategyRunButton';
-import { TopBar, type ForgeMainTab } from './components/TopBar';
+import { TopBar } from './components/TopBar';
 import type { AppView } from './types/navigation';
 import { appViewToMobileNavId, mobileNavIdToAppView } from './utils/mobileNavMap';
 import { DocumentationView } from './views/DocumentationView';
@@ -24,47 +23,36 @@ import { ToolSheetView } from './views/ToolSheetView';
 import { WalkForwardView } from './views/WalkForwardView';
 
 function AppLayout() {
-    const [mainTab, setMainTab] = useState<ForgeMainTab>('backtest');
     const [view, setView] = useState<AppView>('dashboard');
-
-    const handleTopTab = (tab: ForgeMainTab) => {
-        setMainTab(tab);
-        setView('dashboard');
-    };
 
     const handleMobileNav = (id: MobileNavId) => {
         setView(mobileNavIdToAppView(id));
     };
 
-    const dashboardBody =
-        mainTab === 'backtest' ? (
-            <>
-                <RunContextBanner />
-                <div className="app__section">
-                    <div className="app__workspace">
-                        <DataInput />
-                        <DataStreamPreview />
-                    </div>
-                    <div className="app__strategyStrip">
-                        <div className="app__strategyBar">
-                            <div className="app__strategyBarMain">
-                                <StrategyLogic />
-                            </div>
-                            <div className="app__strategyBarRun">
-                                <StrategyRunButton />
-                            </div>
+    const dashboardBody = (
+        <>
+            <RunContextBanner />
+            <div className="app__section">
+                <div className="app__workspace">
+                    <DataInput />
+                    <DataStreamPreview />
+                </div>
+                <div className="app__strategyStrip">
+                    <div className="app__strategyBar">
+                        <div className="app__strategyBarMain">
+                            <StrategyLogic />
+                        </div>
+                        <div className="app__strategyBarRun">
+                            <StrategyRunButton />
                         </div>
                     </div>
-                    <PerformanceMetrics />
-                    <EquityCurveCard />
-                    <RecentExecutionLog />
                 </div>
-            </>
-        ) : mainTab === 'optimize' ? (
-            <ForgeModePlaceholder mode="optimize" />
-        ) : (
-            <ForgeModePlaceholder mode="analyze" />
-        );
+                <PerformanceMetrics />
+                <EquityCurveCard />
+                <RecentExecutionLog />
+            </div>
+        </>
+    );
 
     const mainContent = (() => {
         switch (view) {
@@ -122,7 +110,7 @@ function AppLayout() {
             <Sidebar activeView={view} onNavigate={setView} />
             <MobileNav />
             <div className="app__main">
-                {view === 'dashboard' && <TopBar activeTab={mainTab} onTabChange={handleTopTab} />}
+                {view === 'dashboard' && <TopBar />}
                 <main className="app__content">{mainContent}</main>
             </div>
             <MobileBottomNav activeId={appViewToMobileNavId(view)} onNavigate={handleMobileNav} />
