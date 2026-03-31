@@ -5,7 +5,7 @@ import styles from './data-stream-preview.module.scss';
 /** Shown only when using exchange path; clarifies that rows are not live market data. */
 const EXCHANGE_DEMO_ROWS: StreamPreviewRow[] = [
     {
-        timestamp: '2023-12-31 23:59',
+        timestamp: '2025-12-31 23:59',
         open: '42124.50',
         high: '42300.00',
         low: '42100.20',
@@ -13,7 +13,7 @@ const EXCHANGE_DEMO_ROWS: StreamPreviewRow[] = [
         volume: '124.52',
     },
     {
-        timestamp: '2023-12-31 23:58',
+        timestamp: '2025-12-31 23:58',
         open: '42110.00',
         high: '42150.00',
         low: '42080.50',
@@ -21,7 +21,7 @@ const EXCHANGE_DEMO_ROWS: StreamPreviewRow[] = [
         volume: '89.12',
     },
     {
-        timestamp: '2023-12-31 23:57',
+        timestamp: '2025-12-31 23:57',
         open: '42050.20',
         high: '42120.00',
         low: '42040.00',

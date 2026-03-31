@@ -1,7 +1,7 @@
 """
 Turn a `BacktestRequest` into a single `list[OhlcvBar]`.
 
-- **exchange** + Binance: server downloads klines (canonical bars).
+- **exchange** + Binance / Bybit: server downloads klines (canonical bars).
 - **csv**: client must send `bars` (same schema); validates non-empty.
 
 One list type feeds the engine next — loaders differ, the pipeline does not.
@@ -9,8 +9,10 @@ One list type feeds the engine next — loaders differ, the pipeline does not.
 
 from fastapi import HTTPException
 
-from exchange_binance import fetch_binance_spot_bars, parse_ui_date_range_ms
+from exchange_binance import fetch_binance_spot_bars
+from exchange_bybit import fetch_bybit_spot_bars
 from schemas import BacktestRequest, OhlcvBar
+from ui_dates import parse_ui_date_range_ms
 
 
 def resolve_bars(body: BacktestRequest) -> list[OhlcvBar]:
@@ -23,25 +25,38 @@ def resolve_bars(body: BacktestRequest) -> list[OhlcvBar]:
             )
         return body.bars
 
-    # exchange
     ex = (body.dataset.exchange or "").strip().lower()
-    if ex != "binance":
+    start_ms, end_ms = parse_ui_date_range_ms(body.dataset.start_date, body.dataset.end_date)
+
+    if ex == "binance":
+        bars = fetch_binance_spot_bars(
+            body.dataset.symbol,
+            body.dataset.interval,
+            start_ms,
+            end_ms,
+        )
+        empty_msg = (
+            "No candles returned — check symbol exists on Binance spot, interval, and dates "
+            "(asset may not have traded in that window)."
+        )
+    elif ex == "bybit":
+        bars = fetch_bybit_spot_bars(
+            body.dataset.symbol,
+            body.dataset.interval,
+            start_ms,
+            end_ms,
+        )
+        empty_msg = (
+            "No candles returned — check symbol exists on Bybit spot, interval, and dates "
+            "(pair may not trade in that window on spot)."
+        )
+    else:
         raise HTTPException(
             status_code=501,
             detail=f"Server-side fetch for '{body.dataset.exchange}' is not implemented yet. "
-            "Choose Binance (crypto) or use CSV upload.",
+            "Choose Binance or Bybit (crypto spot), or use CSV upload.",
         )
-    start_ms, end_ms = parse_ui_date_range_ms(body.dataset.start_date, body.dataset.end_date)
-    bars = fetch_binance_spot_bars(
-        body.dataset.symbol,
-        body.dataset.interval,
-        start_ms,
-        end_ms,
-    )
+
     if not bars:
-        raise HTTPException(
-            status_code=422,
-            detail="No candles returned — check symbol exists on Binance spot, interval, and dates "
-            "(asset may not have traded in that window).",
-        )
+        raise HTTPException(status_code=422, detail=empty_msg)
     return bars
