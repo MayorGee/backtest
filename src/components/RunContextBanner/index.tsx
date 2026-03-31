@@ -58,6 +58,12 @@ export function RunContextBanner() {
             <span className={styles.meta}>
                 {usd0.format(portfolio.initialCapital)} initial · {portfolio.feeRoundTripPct}% RT fee ·{' '}
                 {portfolio.slippageBps} bps slip.
+                {dataset.oosStartDate ? (
+                    <>
+                        {' '}
+                        · OOS from {dataset.oosStartDate}
+                    </>
+                ) : null}
             </span>
             {restoredFromHistory ? (
                 <span className={styles.historyLabel}>Restored from history</span>

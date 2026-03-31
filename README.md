@@ -45,6 +45,7 @@ The suite covers the backtest engine (strategies, validation) and HTTP routes (`
 
 - **Asset selection** uses server-side Binance spot klines for supported symbols.
 - **Forex and metals** (e.g. EURUSD, XAUUSD): use **CSV upload** in the UI; the API accepts the same OHLCV shape as exchange-backed bars.
+- **OOS start (optional):** set an out-of-sample start date (`MM/DD/YYYY`, UTC) in data input to receive a second block of KPIs (`OOS · …`) for bars from that day onward. The equity chart remains full-sample; OOS metrics use a cold restart on the shorter series.
 
 ## Vite template
 

@@ -49,6 +49,10 @@ class DatasetConfig(CamelModel):
     exchange: str
     data_source: Literal["exchange", "csv"]
     csv_file_label: str | None = None
+    oos_start_date: str | None = Field(
+        default=None,
+        description="MM/DD/YYYY UTC. If set, metrics are also computed on bars from this day onward (OOS · labels).",
+    )
 
 
 class OhlcvBar(CamelModel):

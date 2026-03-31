@@ -19,6 +19,7 @@ export function DataInput() {
     const [endDate, setEndDate] = useState(() => ds0.endDate);
     const [interval, setInterval] = useState(() => ds0.interval);
     const [exchange, setExchange] = useState(() => ds0.exchange);
+    const [oosStartDate, setOosStartDate] = useState(() => ds0.oosStartDate ?? '');
     const [csvFileName, setCsvFileName] = useState<string | null>(() => ds0.csvFileLabel);
     const [csvError, setCsvError] = useState<string | null>(null);
 
@@ -28,6 +29,7 @@ export function DataInput() {
         setEndDate(ds0.endDate);
         setInterval(ds0.interval);
         setExchange(ds0.exchange);
+        setOosStartDate(ds0.oosStartDate ?? '');
         setActiveTab(ds0.dataSource === 'csv' ? 'csv-upload' : 'asset-selection');
         if (ds0.dataSource === 'csv' && ds0.csvFileLabel) {
             setCsvFileName(ds0.csvFileLabel);
@@ -42,6 +44,7 @@ export function DataInput() {
         ds0.exchange,
         ds0.dataSource,
         ds0.csvFileLabel,
+        ds0.oosStartDate,
     ]);
 
     useEffect(() => {
@@ -54,9 +57,10 @@ export function DataInput() {
                 exchange,
                 dataSource: 'exchange',
                 csvFileLabel: null,
+                oosStartDate: oosStartDate.trim() === '' ? null : oosStartDate.trim(),
             });
         }
-    }, [symbol, startDate, endDate, interval, exchange, activeTab, setDataset]);
+    }, [symbol, startDate, endDate, interval, exchange, oosStartDate, activeTab, setDataset]);
 
     const selectTab = (tab: DataInputTab) => {
         if (tab === 'asset-selection' && activeTab !== 'asset-selection') {
@@ -205,6 +209,29 @@ export function DataInput() {
                                 />
                                 <Calendar className={styles.inputIcon} aria-hidden strokeWidth={2} />
                             </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.field}>
+                        <label className={styles.label} htmlFor="data-oos">
+                            OOS start (optional)
+                        </label>
+                        <p className={styles.fieldHint} id="data-oos-hint">
+                            MM/DD/YYYY (UTC). If set, the API adds a second set of KPIs for bars on or after this date.
+                            Equity curve stays on the full range.
+                        </p>
+                        <div className={styles.inputWrap}>
+                            <input
+                                id="data-oos"
+                                type="text"
+                                className={`${styles.input} ${styles.inputWithEndAdornment}`}
+                                value={oosStartDate}
+                                onChange={(e) => setOosStartDate(e.target.value)}
+                                autoComplete="off"
+                                placeholder="e.g. 07/01/2023"
+                                aria-describedby="data-oos-hint"
+                            />
+                            <Calendar className={styles.inputIcon} aria-hidden strokeWidth={2} />
                         </div>
                     </div>
 

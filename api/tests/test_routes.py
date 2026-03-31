@@ -64,6 +64,66 @@ def test_backtest_csv_buy_hold_json() -> None:
     assert len(data["executions"]) == 1
 
 
+def test_backtest_csv_with_oos_doubles_metric_count() -> None:
+    body = {
+        "strategyId": "buy_hold",
+        "params": {
+            "fastPeriod": 20,
+            "slowPeriod": 50,
+            "rsiPeriod": 14,
+            "rsiOverbought": 70,
+            "rsiOversold": 30,
+        },
+        "portfolio": {
+            "initialCapital": 10000,
+            "feeRoundTripPct": 0,
+            "slippageBps": 0,
+        },
+        "dataset": {
+            "symbol": "TEST",
+            "startDate": "01/01/2024",
+            "endDate": "01/10/2024",
+            "interval": "1d",
+            "exchange": "Binance",
+            "dataSource": "csv",
+            "csvFileLabel": "t.csv",
+            "oosStartDate": "01/02/2024",
+        },
+        "bars": [
+            {
+                "time": "2024-01-01T00:00:00Z",
+                "open": 100,
+                "high": 100,
+                "low": 100,
+                "close": 100,
+                "volume": 1,
+            },
+            {
+                "time": "2024-01-02T00:00:00Z",
+                "open": 100,
+                "high": 100,
+                "low": 100,
+                "close": 100,
+                "volume": 1,
+            },
+            {
+                "time": "2024-01-03T00:00:00Z",
+                "open": 100,
+                "high": 100,
+                "low": 100,
+                "close": 100,
+                "volume": 1,
+            },
+        ],
+    }
+    r = client.post("/backtest", json=body)
+    assert r.status_code == 200, r.text
+    data = r.json()
+    labels = [m["label"] for m in data["metrics"]]
+    assert len(labels) == 12
+    assert any(x.startswith("OOS ·") for x in labels)
+
+
 def test_backtest_csv_requires_bars() -> None:
     body = {
         "strategyId": "buy_hold",

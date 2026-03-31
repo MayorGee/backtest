@@ -76,6 +76,13 @@
     color: $color-text-muted;
 }
 
+.fieldHint {
+    margin: 0 0 $spacing-1;
+    font-size: $text-2xs;
+    line-height: 1.4;
+    color: $color-text-muted;
+}
+
 .inputWrap {
     position: relative;
 }

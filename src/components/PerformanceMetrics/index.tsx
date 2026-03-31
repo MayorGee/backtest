@@ -58,8 +58,8 @@ export function PerformanceMetrics() {
         <section className={styles.section} aria-label="Performance metrics">
             <h2 className={styles.title}>Performance</h2>
             <ul className={styles.grid}>
-                {displayMetrics.map((m) => (
-                    <MetricCard key={m.label} metric={m} />
+                {displayMetrics.map((m, i) => (
+                    <MetricCard key={`${i}-${m.label}`} metric={m} />
                 ))}
             </ul>
         </section>

@@ -10,6 +10,7 @@ Chunk 4: Engine — long-only backtest (buy & hold, SMA crossover, RSI) on resol
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from bar_split import bars_from_oos_start
 from bars_pipeline import resolve_bars
 from engine import run_backtest_engine
 from schemas import BacktestRequest, BacktestResponse
@@ -59,7 +60,20 @@ def run_backtest(body: BacktestRequest) -> BacktestResponse:
     """
     try:
         bars = resolve_bars(body)
-        return run_backtest_engine(body, bars)
+        primary = run_backtest_engine(body, bars)
+        oos_raw = body.dataset.oos_start_date
+        if not (oos_raw and str(oos_raw).strip()):
+            return primary
+        oos_bars = bars_from_oos_start(bars, str(oos_raw).strip())
+        oos_result = run_backtest_engine(body, oos_bars)
+        oos_metrics = [
+            m.model_copy(update={"label": f"OOS · {m.label}"}) for m in oos_result.metrics
+        ]
+        return BacktestResponse(
+            metrics=primary.metrics + oos_metrics,
+            equity=primary.equity,
+            executions=primary.executions,
+        )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 

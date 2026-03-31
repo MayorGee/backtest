@@ -33,6 +33,10 @@ export interface DatasetConfig {
     dataSource: DataSourceMode;
     /** File name when `dataSource === 'csv'`. */
     csvFileLabel: string | null;
+    /**
+     * Optional out-of-sample start (MM/DD/YYYY, UTC). When set, API appends OOS · metrics for bars from this day onward.
+     */
+    oosStartDate: string | null;
 }
 
 export interface StrategyParams {

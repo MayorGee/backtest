@@ -93,6 +93,7 @@ export const initialDataset: DatasetConfig = {
     exchange: 'Binance',
     dataSource: 'exchange',
     csvFileLabel: null,
+    oosStartDate: null,
 };
 
 export const initialBacktestState: BacktestState = {

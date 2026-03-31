@@ -48,6 +48,7 @@ def _req(
             exchange="Binance",
             data_source="exchange",
             csv_file_label=None,
+            oos_start_date=None,
         ),
         bars=None,
     )
